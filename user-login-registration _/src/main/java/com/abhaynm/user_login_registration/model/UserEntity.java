@@ -30,6 +30,7 @@ public class UserEntity implements UserDetails {
     private Gender gender;
     @Enumerated(value = EnumType.STRING)
     private Role role;
+    private String profileImageLink;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

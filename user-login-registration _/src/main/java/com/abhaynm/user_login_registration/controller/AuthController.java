@@ -11,10 +11,8 @@ import lombok.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/auth")
@@ -22,13 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthenticationService authenticationService;
       @PostMapping("/register")
-    public ResponseEntity<ResponseModel<String>> registerUser(@RequestBody @Valid RegisterRequest request){
+    public ResponseEntity<ResponseModel<String>> registerUser(@Valid @RequestPart("request") RegisterRequest request,
+                                                              @RequestPart("profileImage")MultipartFile profileImage){
           //checking if the username is already exists
         if (authenticationService.isEmailExist(request.getEmail())){
             ResponseModel<String>responseModel=new ResponseModel<>("failed","Email Already exists",null);
             return new ResponseEntity<>(responseModel, HttpStatus.CONFLICT);
         }
-        authenticationService.register(request);
+        authenticationService.register(request,profileImage);
         ResponseModel<String>responseModel=new ResponseModel<>("Success","Registration successful",null);
         return new ResponseEntity<>(responseModel,HttpStatus.CREATED);
     }
