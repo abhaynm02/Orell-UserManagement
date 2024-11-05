@@ -48,7 +48,6 @@ public class AuthenticationServiceImp implements AuthenticationService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(Role.USER);
         //profile image uploading
-        log.info("image name:{}",profileImage.getOriginalFilename());
         if (profileImage != null && !profileImage.isEmpty()){
             String newImageLink = cloudinaryService.uploadImageToCloudinary(profileImage);
             user.setProfileImageLink(newImageLink);

@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,5 +37,11 @@ public class GlobalExceptionHandler {
        public ResponseEntity<ResponseModel<String>>handleCloudinaryUploadException(CloudinaryUploadException ex){
         ResponseModel<String>responseModel=new ResponseModel<>("failed","Error uploading image",ex.getMessage());
         return new ResponseEntity<>(responseModel,HttpStatus.INTERNAL_SERVER_ERROR);
+       }
+    //handling large size file
+       @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ResponseModel<String>>handleMaxUploadSizeExceedException(MaxUploadSizeExceededException ex){
+           ResponseModel<String>responseModel=new ResponseModel<>("failed","Error please check image size",ex.getMessage());
+           return new ResponseEntity<>(responseModel,HttpStatus.INTERNAL_SERVER_ERROR);
        }
 }
